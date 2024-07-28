@@ -5,7 +5,7 @@ const cheerio = require('cheerio')
 const PAGE_URL = 'https://www.amazon.es/s?k=cafetera+autom%C3%A1tica&dc&__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=16WTAB8IV83UX&qid=1722165390&rnid=831271031&sprefix=cafeteras+autom%C3%A1tica%2Caps%2C117&ref=sr_nr_p_72_1&ds=v1%3ASakRrouIZKgf3dHGcThuosRVZXkhCV8k9L0ksLKPpcs'
 
 async function getCoffeeMachines (req, reply) {
-  const { max } = req.query
+  const { max = 50 } = req.query
   const browser = await puppeteer.launch({ headless: 'new' })
   const page = await browser.newPage()
 
@@ -34,7 +34,7 @@ async function getCoffeeMachines (req, reply) {
     const rating = ratingElement.text()
     const href = hrefElement.attr('href')
 
-    if (!title || isNaN(price)) return
+    if (!title || isNaN(price) || isNaN(priceWhole)) return
 
     products.push({
       title,
