@@ -1,0 +1,18 @@
+{
+  "restartable": "rs",
+  "ignore": [
+    ".git",
+    "uploads/*",
+    "node_modules/**/node_modules",
+    "*.csv",
+    "src/*.csv",
+    "tmp"
+  ],
+  "verbose": true,
+  "env": {
+    "NODE_ENV": "development",
+    "PORT": "3002",
+    "API_VERSION": "v1"
+  },
+  "ext": "js json"
+}
