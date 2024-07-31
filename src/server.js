@@ -3,9 +3,6 @@ const fastifyApp = require('./app')
 async function start () {
   await fastifyApp.listen({ port: process.env.PORT || 80 })
 
-  if (process.env.NODE_ENV === 'development') {
-  }
-
   fastifyApp.ready(() => {
     console.info('\n' + fastifyApp.printRoutes({ commonPrefix: false }))
     console.info(
