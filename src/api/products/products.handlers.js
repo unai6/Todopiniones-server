@@ -34,6 +34,7 @@ async function getCoffeeMachines (req, reply) {
     const src = imageElement.attr('src')
     const rating = ratingElement.text()
     const href = hrefElement.attr('href')
+    console.info(title, price, priceWhole, src, rating, href)
 
     if (!title || isNaN(price) || isNaN(priceWhole)) return
 
@@ -49,6 +50,7 @@ async function getCoffeeMachines (req, reply) {
 
   const formattedProducts = products.filter(el => el.priceWhole <= max && el.priceWhole > min).sort((p1, p2) => p1.priceWhole - p2.priceWhole)
 
+  console.info('Products:', formattedProducts)
   reply.send({
     result: formattedProducts,
     count: formattedProducts.length,
