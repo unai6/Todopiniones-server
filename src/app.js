@@ -9,7 +9,9 @@ global.config = require('./config')
 
 // Register all services in 'api' folder (recursively).
 
-fastify.register(require('@fastify/cors'), {})
+fastify.register(require('@fastify/cors'), {
+  origin: process.env.WEBSITE_URL || 'https://todopiniones.unaig.com',
+})
 
 fastify.register(autoload, {
   dir: path.join(__dirname, 'api'),
