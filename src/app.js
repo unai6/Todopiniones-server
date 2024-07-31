@@ -17,12 +17,4 @@ fastify.register(autoload, {
   ignorePattern: /.*(model|schema|service|handlers)\.js/,
 })
 
-// Run the server!
-fastify.listen({ port: process.env.PORT || 3002 }, (err) => {
-  if (err) {
-    fastify.log.error(err)
-    process.exit(1)
-  }
-})
-
 module.exports = fastify
