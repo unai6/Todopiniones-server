@@ -18,7 +18,7 @@ fastify.register(autoload, {
 })
 
 // Run the server!
-fastify.listen({ port: process.env.PORT }, (err) => {
+fastify.listen({ port: process.env.PORT || 3002 }, (err) => {
   if (err) {
     fastify.log.error(err)
     process.exit(1)
