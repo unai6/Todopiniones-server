@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: api-todopiniones
+    name: Todopiniones-server
     runtime: node
     plan: free
     autoDeploy: false
