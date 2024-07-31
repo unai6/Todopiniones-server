@@ -1,5 +1,5 @@
 // Require the framework and instantiate it
-const fastify = require('fastify')({ logger: false, ignoreTrailingSlash: true })
+const fastify = require('fastify')({ logger: true, ignoreTrailingSlash: true })
 const autoload = require('@fastify/autoload')
 
 const path = require('path')
@@ -10,7 +10,15 @@ global.config = require('./config')
 // Register all services in 'api' folder (recursively).
 
 fastify.register(require('@fastify/cors'), {
-  origin: process.env.WEBSITE_URL || 'https://todopiniones.unaigo.com',
+    origin: true,
+    allowedHeaders: [
+        'Origin',
+        'X-Requested-With',
+        'Accept',
+        'Content-Type',
+        'Authorization'
+    ],
+    methods: ['GET', 'PUT', 'OPTIONS', 'POST', 'DELETE'],
 })
 
 fastify.register(autoload, {
