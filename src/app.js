@@ -13,11 +13,11 @@ fastify
   .register(require('@fastify/cors'), {
     origin: true,
     allowedHeaders: [
-        'Origin',
-        'X-Requested-With',
-        'Accept',
-        'Content-Type',
-        'Authorization'
+      'Origin',
+      'X-Requested-With',
+      'Accept',
+      'Content-Type',
+      'Authorization'
     ],
     methods: ['GET', 'PUT', 'OPTIONS', 'POST', 'DELETE'],
   })
