@@ -1,60 +1,63 @@
 
 const puppeteer = require('puppeteer')
 const cheerio = require('cheerio')
+const axios = require('axios')
 
-const PAGE_URL = 'https://www.amazon.es/s?k=cafetera+autom%C3%A1tica&dc&__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=16WTAB8IV83UX&qid=1722165390&rnid=831271031&sprefix=cafeteras+autom%C3%A1tica%2Caps%2C117&ref=sr_nr_p_72_1&ds=v1%3ASakRrouIZKgf3dHGcThuosRVZXkhCV8k9L0ksLKPpcs'
+const URL = 'https://www.amazon.es/s?k=cafetera+autom%C3%A1tica&rh=p_72%3A831280031&dc&__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=VT9FY550ML4P&qid=1722527110&rnid=831271031&sprefix=cafetera+autom%C3%A1tica%2Caps%2C105&ref=sr_nr_p_72_1&ds=v1%3ABt8vQlTnUioZ4jAlEnrruusFZA1mlnKZkQSJbRR3l1U'
 
 async function getCoffeeMachines (req, reply) {
   const { min = 1, max = 50 } = req.query
 
-  const browser = await puppeteer.launch({ headless: 'new' })
-  const page = await browser.newPage()
+  try {
 
-  await page.goto(PAGE_URL)
+      const { data: html } = await axios.get(URL)
 
-  const html = await page.content()
-  await browser.close()
+      console.info(html, 'html')
 
-  const $ = cheerio.load(html)
-  const products = []
+      const $ = cheerio.load(html)
+      const products = []
 
-  $('.s-widget-container').each((i, element) => {
-    const titleElement = $(element).find('.s-title-instructions-style')
-    const priceElement = $(element).find('.a-price > span').first()
-    const priceWholeElement = $(element).find('.a-price-whole')
-    const imageElement = $(element).find('.s-image')
-    const ratingElement = $(element).find('.a-icon-alt')
-    const hrefElement = $(element).find('.a-link-normal')
+      $('.s-widget-container').each((i, element) => {
+        const titleElement = $(element).find('.s-title-instructions-style')
+        const priceElement = $(element).find('.a-price > span').first()
+        const priceWholeElement = $(element).find('.a-price-whole')
+        const imageElement = $(element).find('.s-image')
+        const ratingElement = $(element).find('.a-icon-alt')
+        const hrefElement = $(element).find('.a-link-normal')
 
 
 
-    const title = titleElement.text()
-    const price = parseInt(priceElement.text().replace(/[$,]/g, ""), 10)
-    const priceWhole = parseFloat(priceWholeElement.text().replace('.', ''))
-    const src = imageElement.attr('src')
-    const rating = ratingElement.text()
-    const href = hrefElement.attr('href')
-    console.info(title, price, priceWhole, src, rating, href)
+        const title = titleElement.text()
+        const price = parseInt(priceElement.text().replace(/[$,]/g, ""), 10)
+        const priceWhole = parseFloat(priceWholeElement.text().replace('.', ''))
+        const src = imageElement.attr('src')
+        const rating = ratingElement.text()
+        const href = hrefElement.attr('href')
+        console.info(title, price, priceWhole, src, rating, href)
 
-    if (!title || isNaN(price) || isNaN(priceWhole)) return
+        if (!title || isNaN(price) || isNaN(priceWhole)) return
 
-    products.push({
-      title,
-      priceWhole,
-      price: priceElement.text(),
-      src,
-      rating,
-      href,
-    })
-  })
+        products.push({
+          title,
+          priceWhole,
+          price: priceElement.text(),
+          src,
+          rating,
+          href,
+        })
+      })
 
-  const formattedProducts = products.filter(el => el.priceWhole <= max && el.priceWhole > min).sort((p1, p2) => p1.priceWhole - p2.priceWhole)
+      const formattedProducts = products.filter(el => el.priceWhole <= max && el.priceWhole > min).sort((p1, p2) => p1.priceWhole - p2.priceWhole)
 
-  console.info('Products:', formattedProducts)
-  reply.send({
-    result: formattedProducts,
-    count: formattedProducts.length,
-  })
+      console.info('Products:', formattedProducts)
+      reply.send({
+        result: formattedProducts,
+        count: formattedProducts.length,
+      })
+  } catch (err) {
+    console.error(err.response)
+    reply.internalServerError(err)
+  }
 }
 
 module.exports = {
