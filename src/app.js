@@ -9,7 +9,8 @@ global.config = require('./config')
 
 // Register all services in 'api' folder (recursively).
 
-fastify.register(require('@fastify/cors'), {
+fastify
+  .register(require('@fastify/cors'), {
     origin: true,
     allowedHeaders: [
         'Origin',
@@ -19,7 +20,8 @@ fastify.register(require('@fastify/cors'), {
         'Authorization'
     ],
     methods: ['GET', 'PUT', 'OPTIONS', 'POST', 'DELETE'],
-})
+  })
+  .register(require('@fastify/sensible'))
 
 fastify.register(autoload, {
   dir: path.join(__dirname, 'api'),
