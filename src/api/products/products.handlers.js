@@ -15,9 +15,11 @@ async function getProducts (req, reply) {
   const max = Number(req.query.max || 51)
 
   try {
+    await new Promise(resolve => setTimeout(resolve, 250))
+
     const { data: html } = await axios.get(urls[product], {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36',
       }
     })
 
@@ -43,6 +45,8 @@ async function getProducts (req, reply) {
 
       if (!title || isNaN(price) || isNaN(priceWhole)) return
 
+      // productReferralUrl = getProductReferralLink(href)
+
       products.push({
         title,
         priceWhole: Number(priceWhole),
@@ -53,16 +57,35 @@ async function getProducts (req, reply) {
       })
     })
 
-    const formattedProducts = products.filter(el => el.priceWhole <= max && el.priceWhole > min)
+    const formattedProducts = products.filter(el => el.priceWhole <= max && el.priceWhole > min).sort((p1, p2) => p1.priceWhole - p2.priceWhole)
 
     reply.send({
-      result: products,
-      count: products.length,
+      result: formattedProducts,
+      count: formattedProducts.length,
     })
   } catch (err) {
     console.error(err.response)
     reply.internalServerError(err)
   }
+}
+
+// ---------
+async function getProductReferralLink (productUrl) {
+  const { data: html } = await axios.get(`https://www.amazon.es/${productUrl}`, {
+      headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+      'Accept-Language': 'en-US,en;q=0.9',
+      'Accept-Encoding': 'gzip, deflate, br',
+      'Referer': 'https://www.amazon.es/',
+      'Connection': 'keep-alive',
+      }
+  })
+
+  const $ = cheerio.load(html)
+
+  const link = $('.amzn-ss-link-container')
+  console.info(link.html())
 }
 
 module.exports = {
