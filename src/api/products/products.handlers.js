@@ -3,10 +3,23 @@ const puppeteer =  require('puppeteer')
 const cheerio = require('cheerio')
 const axios = require('axios')
 
+const fs = require('fs')
+const path = require('path')
+
 
 const urls = {
   'coffee-machine-auto': 'https://www.amazon.es/s?k=cafetera+autom%C3%A1tica&rh=p_72%3A831280031&dc&__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=VT9FY550ML4P&qid=1722527110&rnid=831271031&sprefix=cafetera+autom%C3%A1tica%2Caps%2C105&ref=sr_nr_p_72_1&ds=v1%3ABt8vQlTnUioZ4jAlEnrruusFZA1mlnKZkQSJbRR3l1U',
   'phone-cases': 'https://www.amazon.es/s?k=fundas+movil&rh=p_72%3A831280031&dc&qid=1722536283&rnid=831271031&ref=sr_nr_p_72_1&ds=v1%3A2xEKd3j5ztCFUpaoB0u2r%2BHWeDCGex5Gk2lZnpIqjl8',
+}
+
+async function getScrapedProducts (req, reply) {
+  const { min, max } = req.query
+  const products = JSON.parse(fs.readFileSync(path.join(__dirname, `/data/products-${min}-${max}.json`), 'utf-8'))
+
+    reply.send({
+      result: products,
+      count: products.length,
+    })
 }
 
 async function getProducts(req, reply) {
@@ -22,7 +35,6 @@ async function getProducts(req, reply) {
   })
 
   try {
-
     const html = await page.content()
     const $ = cheerio.load(html)
     const products = []
@@ -56,6 +68,8 @@ async function getProducts(req, reply) {
 
     const formattedProducts = products.filter(el => el.priceWhole <= max && el.priceWhole > min).sort((p1, p2) => p1.priceWhole - p2.priceWhole) || []
 
+    fs.writeFileSync(path.join(__dirname, `/data/products-${min}-${max}.json`), JSON.stringify(formattedProducts, null, 2))
+
     reply.send({
       result: formattedProducts,
       count: formattedProducts.length,
@@ -87,5 +101,6 @@ async function getProductReferralLink (productUrl) {
 }
 
 module.exports = {
-  getProducts
+  getProducts,
+  getScrapedProducts,
 }
