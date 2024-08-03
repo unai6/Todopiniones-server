@@ -1,28 +1,29 @@
 
-const puppeteer = require('puppeteer')
+const puppeteer =  require('puppeteer')
 const cheerio = require('cheerio')
 const axios = require('axios')
+
 
 const urls = {
   'coffee-machine-auto': 'https://www.amazon.es/s?k=cafetera+autom%C3%A1tica&rh=p_72%3A831280031&dc&__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=VT9FY550ML4P&qid=1722527110&rnid=831271031&sprefix=cafetera+autom%C3%A1tica%2Caps%2C105&ref=sr_nr_p_72_1&ds=v1%3ABt8vQlTnUioZ4jAlEnrruusFZA1mlnKZkQSJbRR3l1U',
   'phone-cases': 'https://www.amazon.es/s?k=fundas+movil&rh=p_72%3A831280031&dc&qid=1722536283&rnid=831271031&ref=sr_nr_p_72_1&ds=v1%3A2xEKd3j5ztCFUpaoB0u2r%2BHWeDCGex5Gk2lZnpIqjl8',
 }
 
-async function getProducts (req, reply) {
+async function getProducts(req, reply) {
   const { product } = req.query
 
   const min = Number(req.query.min || 1)
   const max = Number(req.query.max || 51)
 
+  const browser = await puppeteer.launch({ headless: true })
+  const page = await browser.newPage()
+  await page.goto(urls[product], {
+    waitUntil: 'networkidle2',
+  })
+
   try {
-    await new Promise(resolve => setTimeout(resolve, 5000))
 
-    const { data: html } = await axios.get(urls[product], {
-      headers: {
-      ' User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36',
-      }
-    })
-
+    const html = await page.content()
     const $ = cheerio.load(html)
     const products = []
 
@@ -34,8 +35,6 @@ async function getProducts (req, reply) {
       const ratingElement = $(element).find('.a-icon-alt')
       const hrefElement = $(element).find('.a-link-normal')
 
-
-
       const title = titleElement.text()
       const price = parseInt(priceElement.text().replace(/[$,]/g, ""), 10)
       const priceWhole = parseFloat(priceWholeElement.text().replace('.', ''))
@@ -44,8 +43,6 @@ async function getProducts (req, reply) {
       const href = hrefElement.attr('href')
 
       if (!title || isNaN(price) || isNaN(priceWhole)) return
-
-      // productReferralUrl = getProductReferralLink(href)
 
       products.push({
         title,
@@ -57,18 +54,19 @@ async function getProducts (req, reply) {
       })
     })
 
-    const formattedProducts = products.filter(el => el.priceWhole <= max && el.priceWhole > min).sort((p1, p2) => p1.priceWhole - p2.priceWhole)
+    const formattedProducts = products.filter(el => el.priceWhole <= max && el.priceWhole > min).sort((p1, p2) => p1.priceWhole - p2.priceWhole) || []
 
     reply.send({
       result: formattedProducts,
       count: formattedProducts.length,
     })
   } catch (err) {
-    console.error(err.response)
+    console.error(err)
     reply.internalServerError(err)
+  } finally {
+    await browser.close()
   }
 }
-
 // ---------
 async function getProductReferralLink (productUrl) {
   const { data: html } = await axios.get(`https://www.amazon.es/${productUrl}`, {
