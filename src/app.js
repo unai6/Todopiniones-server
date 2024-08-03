@@ -1,5 +1,5 @@
 // Require the framework and instantiate it
-const fastify = require('fastify')({ logger: false, ignoreTrailingSlash: true })
+const fastify = require('fastify')({ logger: true, ignoreTrailingSlash: true })
 const autoload = require('@fastify/autoload')
 
 const path = require('path')

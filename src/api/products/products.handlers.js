@@ -12,9 +12,10 @@ const urls = {
   'phone-cases': 'https://www.amazon.es/s?k=fundas+movil&rh=p_72%3A831280031&dc&qid=1722536283&rnid=831271031&ref=sr_nr_p_72_1&ds=v1%3A2xEKd3j5ztCFUpaoB0u2r%2BHWeDCGex5Gk2lZnpIqjl8',
 }
 
+// ---------
 async function getScrapedProducts (req, reply) {
-  const { min, max } = req.query
-  const products = JSON.parse(fs.readFileSync(path.join(__dirname, `/data/products-${min}-${max}.json`), 'utf-8'))
+  const { min, max, product } = req.query
+  const products = JSON.parse(fs.readFileSync(path.join(__dirname, `/data/products-${product}-${min}-${max}.json`), 'utf-8'))
 
     reply.send({
       result: products,
@@ -22,6 +23,7 @@ async function getScrapedProducts (req, reply) {
     })
 }
 
+// ---------
 async function getProducts(req, reply) {
   const { product } = req.query
 
@@ -68,7 +70,7 @@ async function getProducts(req, reply) {
 
     const formattedProducts = products.filter(el => el.priceWhole <= max && el.priceWhole > min).sort((p1, p2) => p1.priceWhole - p2.priceWhole) || []
 
-    fs.writeFileSync(path.join(__dirname, `/data/products-${min}-${max}.json`), JSON.stringify(formattedProducts, null, 2))
+    fs.writeFileSync(path.join(__dirname, `/data/products-${product}-${min}-${max}.json`), JSON.stringify(formattedProducts, null, 2))
 
     reply.send({
       result: formattedProducts,
@@ -81,6 +83,7 @@ async function getProducts(req, reply) {
     await browser.close()
   }
 }
+
 // ---------
 async function getProductReferralLink (productUrl) {
   const { data: html } = await axios.get(`https://www.amazon.es/${productUrl}`, {
