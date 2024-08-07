@@ -100,20 +100,20 @@ async function getProductReferralLink (productUrl) {
   await page.goto('https://www.amazon.es/ap/signin?openid.pape.max_auth_age=0&openid.return_to=https%3A%2F%2Fafiliados.amazon.es%2F&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.assoc_handle=amzn_associates_es&openid.mode=checkid_setup&marketPlaceId=A1RKKUPIHCS9HS&language=es_ES&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0')
   // Enter email
   await page.waitForSelector('input[name="email"]')
-  await page.type('input[name="email"]', 'unaigoe91@gmail.com')
+  await page.type('input[name="email"]', process.env.AMAZON_EMAIL)
   await page.evaluate(() =>  new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 1000)))
 
   // Enter password
   const inputContinue = await page.$('input#continue')
   if (!inputContinue) {
-    await page.type('input[name="password"]', '45788916Xx')
+    await page.type('input[name="password"]', process.env.AMAZON_PWD)
     await page.evaluate(() =>  new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 1000)))
   } else {
     await page.click('input#continue')
     await page.waitForNavigation()
     await page.evaluate(() => new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 1000)))
 
-    await page.type('input[name="password"]', '45788916Xx')
+    await page.type('input[name="password"]', process.env.AMAZON_PWD)
     await page.evaluate(() =>  new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 1000)))
   }
 
