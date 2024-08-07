@@ -41,33 +41,6 @@ async function getProducts(req, reply) {
     const $ = cheerio.load(html)
     const products = []
 
-//     $('.s-widget-container').each((i, element) => {
-//       const titleElement = $(element).find('.s-title-instructions-style')
-//       const priceElement = $(element).find('.a-price > span').first()
-//       const priceWholeElement = $(element).find('.a-price-whole')
-//       const imageElement = $(element).find('.s-image')
-//       const ratingElement = $(element).find('.a-icon-alt')
-//       const hrefElement = $(element).find('.a-link-normal')
-//
-//       const title = titleElement.text()
-//       const price = parseInt(priceElement.text().replace(/[$,]/g, ""), 10)
-//       const priceWhole = parseFloat(priceWholeElement.text().replace('.', ''))
-//       const src = imageElement.attr('src')
-//       const rating = ratingElement.text()
-//       const href = getProductReferralLink(hrefElement.attr('href'))
-//
-//       if (!title || isNaN(price) || isNaN(priceWhole)) return
-//
-//       products.push({
-//         title,
-//         priceWhole: Number(priceWhole),
-//         price: priceElement.text(),
-//         src,
-//         rating,
-//         href,
-//       })
-    //     })
-
   const elements = $('.s-widget-container').toArray()
 
     for (const element of elements) {
