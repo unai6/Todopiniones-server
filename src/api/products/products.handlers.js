@@ -11,6 +11,7 @@ const urls = {
   'coffee-machine-auto': 'https://www.amazon.es/s?k=cafetera+autom%C3%A1tica&rh=p_72%3A831280031&dc&__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=VT9FY550ML4P&qid=1722527110&rnid=831271031&sprefix=cafetera+autom%C3%A1tica%2Caps%2C105&ref=sr_nr_p_72_1&ds=v1%3ABt8vQlTnUioZ4jAlEnrruusFZA1mlnKZkQSJbRR3l1U',
   'phone-cases': 'https://www.amazon.es/s?k=fundas+movil&rh=p_72%3A831280031&dc&qid=1722536283&rnid=831271031&ref=sr_nr_p_72_1&ds=v1%3A2xEKd3j5ztCFUpaoB0u2r%2BHWeDCGex5Gk2lZnpIqjl8',
   'robot-vaccum': 'https://www.amazon.es/s?k=robot+aspirador&i=kitchen&rh=n%3A599391031%2Cp_36%3A50000-&dc&crid=2W6U2SQVJ7X6L&qid=1723053479&rnid=831271031&sprefix=robo%2Ckitchen%2C93&ref=sr_nr_p_72_1&ds=v1%3Anxs1%2FvHOIsZYH01xjUGaHBQSzdLXZmPWpygJGAEx18Y',
+  'television': 'https://www.amazon.es/s?k=televisores&i=electronics&rh=n%3A599370031%2Cp_n_size_browse-bin%3A9598540031%7C9598541031%7C9598542031%7C9598543031%7C9598544031&dc&__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=JGT5HKMRA84J&qid=1723144075&rnid=831271031&sprefix=televisores%2Celectronics%2C101&ref=sr_nr_p_72_1&ds=v1%3A9MGu3Z1itVzCkgCHCNql1JdDBIXvwpY3g8w7nT%2Fin7g',
 }
 
 // ---------

@@ -7,22 +7,21 @@ const path = require('path')
 // Global vars. Mainly used for config options to be accessible everywhere.
 global.config = require('./config')
 
-// Register all services in 'api' folder (recursively).
-
 fastify
-  .register(require('@fastify/cors'), {
-    origin: true,
-    allowedHeaders: [
-      'Origin',
-      'X-Requested-With',
-      'Accept',
-      'Content-Type',
-      'Authorization'
-    ],
-    methods: ['GET', 'PUT', 'OPTIONS', 'POST', 'DELETE'],
-  })
-  .register(require('@fastify/sensible'))
+.register(require('@fastify/cors'), {
+  origin: true,
+  allowedHeaders: [
+    'Origin',
+    'X-Requested-With',
+    'Accept',
+    'Content-Type',
+    'Authorization'
+  ],
+  methods: ['GET', 'PUT', 'OPTIONS', 'POST', 'DELETE'],
+})
+.register(require('@fastify/sensible'))
 
+// Register all services in 'api' folder (recursively).
 fastify.register(autoload, {
   dir: path.join(__dirname, 'api'),
   options: { prefix: global.config.apiPrefix[process.env.NODE_ENV] },

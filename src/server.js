@@ -12,7 +12,7 @@ async function start () {
 
     console.info(
       '\n=======================================================' +
-      `\nDogfy API ready / Port: ${fastifyApp.server.address().port} / NODE_ENV: ${process.env.NODE_ENV}` +
+      `\nTodo productos API ready / Port: ${fastifyApp.server.address().port} / NODE_ENV: ${process.env.NODE_ENV}` +
       '\n=======================================================',
     )
   })

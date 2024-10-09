@@ -5,6 +5,18 @@
     "price": "21,00 €",
     "src": "https://m.media-amazon.com/images/I/61RhqwkZqzL._AC_UL320_.jpg",
     "rating": "4,1 de 5 estrellas",
-    "href": "https://amzn.to/4fxsoEL"
+    "href": "https://amzn.to/4fxsoEL",
+    "pros": [
+      "Precio accesible",
+      "Fácil de usar",
+      "Gran capacidad",
+      "Diseño elegante"
+    ],
+    "contras": [
+      "Calidad del café puede variar",
+      "Velocidad de preparación",
+      "Diseño básico en algunos modelos",
+      "No mantiene el café caliente por mucho tiempo"
+    ]
   }
 ]
